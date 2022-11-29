@@ -1,4 +1,5 @@
 using UnityEngine; //Required for Unity connection
+using System.Collections;
 
 //Require a Character controller component to be attached to the game object for movement
 [RequireComponent(typeof(CharacterController))]
@@ -19,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
     //A variable to store our movement direction to use for movement
     private Vector3 _moveDir;
     private Vector3 _pos;
+    //GameObject to store the door we are trying to open
+    private GameObject _door;
+    //Raycast hit to store hitinfo
+    private RaycastHit _hitInfo;
     #endregion
 
     void Start()
@@ -56,7 +61,20 @@ public class PlayerMovement : MonoBehaviour
             //If we press the jump key add the jump value to our y position and trigger the animation
             if (Input.GetKey(KeyCode.Space))
             {
-                _moveDir.y = jumpSpeed;
+                //Create a ray to hit the doors
+                Ray _doorRay = new Ray(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.forward);
+                //Cast the ray
+                if (Physics.Raycast(_doorRay, out _hitInfo, 10f))
+                {
+                    if (_hitInfo.transform.tag == "Doors")
+                    {
+                        StartCoroutine("OpenDoor", _hitInfo);
+                    }
+                    else if (_hitInfo.transform.tag == "Garage")
+                    {
+                        StartCoroutine("OpenGarage", _hitInfo);
+                    }
+                }
             }
         }
         //Allow gravity to pull us down regardless of us being on the ground or not
@@ -67,6 +85,46 @@ public class PlayerMovement : MonoBehaviour
         _pos = transform.position;
         transform.position = _pos;
         #endregion
+    }
+    public IEnumerator OpenDoor(RaycastHit hitinfo)
+    {
+        GameObject _door = hitinfo.collider.gameObject;
+        _door.GetComponent<Collider>().enabled = false;
+        float currentFloat = _door.GetComponent<Renderer>().material.GetFloat("_Amount");
+        while (_door.GetComponent<Renderer>().material.GetFloat("_Amount") < 1.65f)
+        {
+            currentFloat += 0.02f;
+            _door.GetComponent<Renderer>().material.SetFloat("_Amount", currentFloat);
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        yield return new WaitForSecondsRealtime(3f);
+        while (_door.GetComponent<Renderer>().material.GetFloat("_Amount") > 0.9f)
+        {
+            currentFloat -= 0.02f;
+            _door.GetComponent<Renderer>().material.SetFloat("_Amount", currentFloat);
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        _door.GetComponent<Collider>().enabled = true;
+    }
+    public IEnumerator OpenGarage(RaycastHit hitinfo)
+    {
+        GameObject _door = hitinfo.collider.gameObject;
+        _door.GetComponent<Collider>().enabled = false;
+        float currentFloat = _door.GetComponent<Renderer>().material.GetFloat("_Amount");
+        while (_door.GetComponent<Renderer>().material.GetFloat("_Amount") < 0.7f)
+        {
+            currentFloat += 0.05f;
+            _door.GetComponent<Renderer>().material.SetFloat("_Amount", currentFloat);
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        yield return new WaitForSecondsRealtime(3f);
+        while (_door.GetComponent<Renderer>().material.GetFloat("_Amount") > 0.15f)
+        {
+            currentFloat -= 0.05f;
+            _door.GetComponent<Renderer>().material.SetFloat("_Amount", currentFloat);
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        _door.GetComponent<Collider>().enabled = true;
     }
     #region Pause
     public void Pause()
@@ -85,6 +143,18 @@ public class PlayerMovement : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+    #endregion
+    #region Trigger
+    private void OnTriggerEnter(Collider other)
+    {
+        //If we enter a trigger turn the light on
+        other.gameObject.GetComponent<Light>().enabled = true;
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        //Turn light off when we leave trigger
+        other.gameObject.GetComponent<Light>().enabled = false;
     }
     #endregion
 }

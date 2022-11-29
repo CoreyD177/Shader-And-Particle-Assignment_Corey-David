@@ -683,7 +683,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "1966e07202734deba02487968de90709",
     "m_Id": 0,
-    "m_DisplayName": "AlphaCutoff",
+    "m_DisplayName": "Amount",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1087,7 +1087,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"46361ed287539954baffa3e57d3bd4ee\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"cee52a137e9fc024aab9706e62e4727e\",\"type\":3}}",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -1485,10 +1485,10 @@
     "m_Guid": {
         "m_GuidSerialized": "807df95f-828e-47f0-a4dc-b3a47abf7b56"
     },
-    "m_Name": "AlphaCutoff",
+    "m_Name": "Amount",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "AlphaCutoff",
-    "m_DefaultReferenceName": "_AlphaCutoff",
+    "m_RefNameGeneratedByDisplayName": "Amount",
+    "m_DefaultReferenceName": "_Amount",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

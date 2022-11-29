@@ -7,6 +7,7 @@ Shader "Custom/PoolTableShader"
         _MetallicMap ("Metallic", 2D) = "white" { }
         [Normal]  _BumpMap ("Normal Map", 2D) = "bump" { }
         _Cutoff("Alpha cutoff", Range(0,1)) = 0.5
+        
     }
     SubShader
     {
@@ -45,6 +46,7 @@ Shader "Custom/PoolTableShader"
         
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
+
             // Albedo comes from a texture tinted by color
             half4 c = tex2D(_MainTex, IN.uv_MainTex);
             o.Albedo = c.rgb;
